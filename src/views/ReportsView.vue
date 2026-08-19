@@ -52,6 +52,8 @@ const formatDate = (dateStr: string) => {
   })
 }
 
+const getTransactionDate = (transaction: Transaction) => transaction.date || transaction.createdAt
+
 const loadUserInfo = () => {
   const userInfoStr = localStorage.getItem('userInfo')
   if (userInfoStr) {
@@ -376,7 +378,7 @@ onMounted(async () => {
                     {{ transaction.description || transaction.category }}
                   </p>
                   <p class="text-xs text-gray-500 dark:text-gray-400">
-                    {{ transaction.category }} • {{ formatDate(transaction.createdAt) }}
+                    {{ transaction.category }} • {{ formatDate(getTransactionDate(transaction)) }}
                   </p>
                 </div>
               </div>

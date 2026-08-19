@@ -58,9 +58,11 @@ const balance = computed(() => {
 });
 
 // Ultimas transacciones
+const getTransactionDate = (transaction: Transaction) => transaction.date || transaction.createdAt;
+
 const ultimasTransacciones = computed(() => {
   return [...transacciones.value]
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .sort((a, b) => new Date(getTransactionDate(b)).getTime() - new Date(getTransactionDate(a)).getTime())
     .slice(0, 5);
 });
 
@@ -395,7 +397,7 @@ onUnmounted(() => {
                   </div>
                   <div>
                     <p class="font-medium text-gray-900 dark:text-gray-100">{{ transaccion.description || 'Sin descripción' }}</p>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ transaccion.category }} • {{ formatDate(transaccion.createdAt) }}</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ transaccion.category }} • {{ formatDate(getTransactionDate(transaccion)) }}</p>
                   </div>
                 </div>
                 <p
@@ -495,4 +497,3 @@ onUnmounted(() => {
 <style scoped>
 /* Estilos adicionales si son necesarios */
 </style>
-
