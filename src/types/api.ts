@@ -35,6 +35,7 @@ export interface CreateTransactionRequest {
   type: TransactionType;
   category: string;
   description?: string;
+  date?: string;
   source: TransactionSource;
 }
 

@@ -136,7 +136,7 @@ const loadExpenses = async () => {
       id: t.id,
       descripcion: t.description || 'Sin descripción',
       monto: t.amount,
-      fecha: t.createdAt,
+      fecha: t.date || t.createdAt,
       categoria: t.category
     }));
 
@@ -196,6 +196,7 @@ const saveExpense = async () => {
       type: TransactionType.Expense,
       category: formData.value.categoria,
       description: formData.value.descripcion,
+      date: formData.value.fecha,
       source: TransactionSource.Manual
     });
 
@@ -667,4 +668,3 @@ onMounted(async () => {
 <style scoped>
 /* Estilos adicionales si son necesarios */
 </style>
-
