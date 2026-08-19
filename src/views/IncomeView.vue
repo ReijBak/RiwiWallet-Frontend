@@ -123,7 +123,7 @@ const loadIncome = async () => {
       id: t.id,
       descripcion: t.description || 'Sin descripción',
       monto: t.amount,
-      fecha: t.createdAt,
+      fecha: t.date || t.createdAt,
       categoria: t.category
     }));
 
@@ -183,6 +183,7 @@ const saveIncome = async () => {
       type: TransactionType.Income,
       category: formData.value.categoria,
       description: formData.value.descripcion,
+      date: formData.value.fecha,
       source: TransactionSource.Manual
     });
 

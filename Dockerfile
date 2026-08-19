@@ -1,37 +1,21 @@
-# Stage 1: Build
-FROM node:20.19-alpine as build-stage
-
+FROM node:22-alpine AS build
 WORKDIR /app
 
-# Copy package.json and package-lock.json first to leverage Docker cache
 COPY package*.json ./
+RUN npm ci
 
-# Install dependencies - delete package-lock and regenerate for Linux compatibility
-RUN rm -f package-lock.json && npm install
-
-# Copy the rest of the code
 COPY . .
 
-# Build arguments (Vite needs this at build time)
-ARG VITE_AUTH_API_URL
-ARG VITE_MAIN_API_URL
-
-# Set environment variables for the build process
+ARG VITE_AUTH_API_URL=http://localhost:8080/api
+ARG VITE_MAIN_API_URL=http://localhost:5203/api
 ENV VITE_AUTH_API_URL=$VITE_AUTH_API_URL
 ENV VITE_MAIN_API_URL=$VITE_MAIN_API_URL
 
-# Build the application for production
 RUN npm run build
 
-# Stage 2: Nginx server for production
-FROM nginx:alpine as production-stage
-
-# Copy nginx configuration
+FROM nginx:1.27-alpine AS runtime
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Copy files generated in build stage to Nginx folder
-COPY --from=build-stage /app/dist /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
 
 EXPOSE 80
-
 CMD ["nginx", "-g", "daemon off;"]
